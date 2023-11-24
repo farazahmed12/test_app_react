@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CustomerPic from "../assets/customerPic.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomers } from "../store/customerSlice";
+import ArrowUp from "../assets/uparrow.png";
 
 const CustomersTable = ({
   setEdit,
@@ -12,7 +14,27 @@ const CustomersTable = ({
   setPage,
   totalPages,
 }) => {
+  const dispatch = useDispatch();
   const customers = useSelector((state) => state.customer.customers);
+  const [asc, setasc] = useState(true);
+
+  const handleSort = () => {
+    if (asc) {
+      setasc(!asc);
+      const newArr = [...customers]?.sort((a, b) => {
+        return a.first_name.localeCompare(b.first_name);
+      });
+      dispatch(getCustomers(newArr));
+    } else {
+      setasc(!asc);
+      const newArr = [...customers]?.sort((a, b) => {
+        return b.first_name.localeCompare(a.first_name);
+      });
+      dispatch(getCustomers(newArr));
+    }
+  };
+
+  useEffect(() => {}, [asc]);
 
   return (
     <div>
@@ -22,8 +44,16 @@ const CustomersTable = ({
             <thead class="text-xs mb-5 bg-[#6fc7a1] text-[#015249] uppercase  dark:bg-gray-700 dark:text-gray-400">
               <tr className="">
                 <th scope="col" class="px-6 py-3 rounded-l-lg"></th>
-                <th scope="col" class="px-6 py-3">
-                  Customer ID
+                <th
+                  scope="col"
+                  class="px-6 flex flex-row items-center py-3 cursor-pointer"
+                  onClick={() => handleSort()}
+                >
+                  Customer ID{" "}
+                  <img
+                    src={ArrowUp}
+                    className={`h-2 w-2 object-contain ${asc && "rotate-180"}`}
+                  />
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Customer Name
