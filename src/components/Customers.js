@@ -19,6 +19,9 @@ const Customers = () => {
       })
       .catch((err) => {});
   };
+  const [addNewVisible, setAddNewVisible] = useState(false);
+  const [selectedItem, setSelecteditem] = useState([]);
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     getData();
@@ -53,17 +56,35 @@ const Customers = () => {
         </div>
 
         <div className="bg-[#F3F3F3] pt-10 w-full h-full px-4">
-          <div className="w-fit flex flex-row justify-center items-center py-2 px-4 gap-x-2 rounded-md text-white bg-gradient-to-r from-[#57BC90] to-[#004B40] ">
+          <div
+            onClick={() => setAddNewVisible(true)}
+            className="w-fit flex flex-row cursor-pointer justify-center items-center py-2 px-4 gap-x-2 rounded-md text-white bg-gradient-to-r from-[#57BC90] to-[#004B40] "
+          >
             <p className="text-white ">+</p>
             <p className="text-sm uppercase text-white font-normal">
               Add Customers
             </p>
           </div>
-          <CustomersTable />
+          <CustomersTable
+            setEdit={setEdit}
+            setSelecteditem={setSelecteditem}
+            setModalVisible={() => {
+              setAddNewVisible(true);
+            }}
+          />
         </div>
       </div>
 
-      <AddNewModal modalVisible={true} />
+      <AddNewModal
+        modalVisible={addNewVisible}
+        setModalVisible={() => {
+          setAddNewVisible(false);
+          setEdit(false);
+          setSelecteditem([]);
+        }}
+        edit={edit}
+        selectedItem={selectedItem}
+      />
     </div>
   );
 };

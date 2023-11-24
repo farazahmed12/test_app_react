@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import { toast, ToastContainer } from "react-toastify";
+import { addCustomers, updateCustomer } from "../store/customerSlice";
+import { useDispatch } from "react-redux";
 
 function AddNewModal({
   setModalVisible,
   modalVisible,
-  setDeleteItem,
-  deleteItem,
-  handleDeleteItem,
-  name,
+
+  selectedItem,
+  edit,
 }) {
+  const [data, setData] = useState({
+    id: Math.floor(Math.random() * 30),
+    first_name: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    if (edit == true) {
+      setData({
+        first_name: selectedItem.first_name,
+        email: selectedItem.email,
+        id: selectedItem.id,
+      });
+    }
+  }, [modalVisible]);
+
+  const dispatch = useDispatch();
+
   return (
     <div
       className={`${
@@ -21,7 +40,10 @@ function AddNewModal({
             className="  text-white px-3 mb-2 rounded cursor-pointer"
             onClick={() => {
               setModalVisible(!modalVisible);
-              setDeleteItem([]);
+              setData({
+                first_name: "",
+                email: "",
+              });
             }}
           >
             x
@@ -29,7 +51,7 @@ function AddNewModal({
         </div>
         <div className="bg-gradient-to-r from-[#57BC90] to-[#004B40] flex justify-center items-center py-8">
           <h2 className="text-white text-lg  font-semibold ">
-            Add New Customer
+            {edit == true ? "Update a Customer" : "Add New Customer"}
           </h2>
         </div>
 
@@ -42,6 +64,14 @@ function AddNewModal({
               Customer Name
             </label>
             <input
+              name="first_name"
+              value={data.first_name}
+              onChange={(e) => {
+                setData({
+                  ...data,
+                  [e.target.name]: e.target.value,
+                });
+              }}
               placeholder="Customer Name"
               type="text"
               id="small-input"
@@ -56,6 +86,14 @@ function AddNewModal({
               Email
             </label>
             <input
+              name="email"
+              value={data.email}
+              onChange={(e) => {
+                setData({
+                  ...data,
+                  [e.target.name]: e.target.value,
+                });
+              }}
               placeholder="Email"
               type="email"
               id="small-input"
@@ -63,8 +101,19 @@ function AddNewModal({
             />
           </div>
 
-          <div className="flex text-white py-2 rounded-md cursor-pointer bg-gradient-to-r from-[#57BC90] to-[#004B40]  flex-row justify-center w-8/12 mt-6 mb-10">
-            Add Customer
+          <div
+            onClick={() => {
+              if (edit == true) {
+                dispatch(updateCustomer(data));
+                setModalVisible(!modalVisible);
+              } else {
+                dispatch(addCustomers(data));
+                setModalVisible(!modalVisible);
+              }
+            }}
+            className="flex text-white py-2 rounded-md cursor-pointer bg-gradient-to-r from-[#57BC90] to-[#004B40]  flex-row justify-center w-8/12 mt-6 mb-10"
+          >
+            {edit == true ? "Update Customer" : "Add Customer"}
           </div>
         </div>
       </div>
