@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CustomerPic from "../assets/customerPic.png";
+import { useSelector } from "react-redux";
 
-const CustomersTable = ({ data }) => {
-  useEffect(() => {}, []);
+const CustomersTable = ({}) => {
+  const customers = useSelector((state) => state.customer.customers);
+
   return (
     <div>
       <div class="relative overflow-x-auto py-10">
@@ -23,7 +25,7 @@ const CustomersTable = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((item, i) => {
+            {customers?.map((item, i) => {
               return (
                 <tr class="  bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th

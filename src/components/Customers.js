@@ -4,21 +4,24 @@ import Logo from "../assets/Logo.png";
 import CustomerLogo from "../assets/customersicon.svg";
 import CustomersTable from "./CustomersTable";
 import AddNewModal from "./AddNewModal";
+import { getCustomers } from "../store/customerSlice";
+import { useDispatch } from "react-redux";
 
 const Customers = () => {
-  const [data, setData] = useState();
-  const getCustomers = () => {
+  const dispatch = useDispatch();
+  const getData = () => {
     axios
       .get(`https://reqres.in/api/users?page=1`)
       .then((res) => {
         console.log(res);
-        setData(res?.data?.data);
+
+        dispatch(getCustomers(res?.data?.data));
       })
       .catch((err) => {});
   };
 
   useEffect(() => {
-    getCustomers();
+    getData();
   }, []);
 
   return (
@@ -56,7 +59,7 @@ const Customers = () => {
               Add Customers
             </p>
           </div>
-          <CustomersTable data={data} />
+          <CustomersTable />
         </div>
       </div>
 
