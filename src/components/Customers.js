@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 import Logo from "../assets/Logo.png";
 import CustomerLogo from "../assets/customersicon.svg";
 import CustomersTable from "./CustomersTable";
+import AddNewModal from "./AddNewModal";
 
 const Customers = () => {
-  useEffect(() => {}, []);
+  const [data, setData] = useState();
+  const getCustomers = () => {
+    axios
+      .get(`https://reqres.in/api/users?page=1`)
+      .then((res) => {
+        console.log(res);
+        setData(res?.data?.data);
+      })
+      .catch((err) => {});
+  };
+
+  useEffect(() => {
+    getCustomers();
+  }, []);
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex relative">
       {/* sidebar */}
       <div className="w-56 bg-[#015249] h-full flex flex-col justify-start items-center fixed top-0 left-0 bottom-0">
         <img
@@ -42,9 +56,11 @@ const Customers = () => {
               Add Customers
             </p>
           </div>
-          <CustomersTable />
+          <CustomersTable data={data} />
         </div>
       </div>
+
+      <AddNewModal modalVisible={true} />
     </div>
   );
 };
