@@ -18,13 +18,17 @@ const Customers = () => {
   const [edit, setEdit] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteItem, setDeleteItem] = useState([]);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(1);
+  const [TotalPages, setTotalPages] = useState(1);
 
   const getData = () => {
     axios
-      .get(`https://reqres.in/api/users?page=1`)
+      .get(`https://reqres.in/api/users?page=${page}`)
       .then((res) => {
-        console.log(res);
-
+        setPage(res?.data?.page);
+        setPerPage(res?.data?.per_page);
+        setTotalPages(res?.data?.total_pages);
         dispatch(getCustomers(res?.data?.data));
       })
       .catch((err) => {
@@ -42,7 +46,8 @@ const Customers = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [page]);
+
   return (
     <div className="min-h-screen flex relative">
       {/* sidebar */}
@@ -89,6 +94,9 @@ const Customers = () => {
             }}
             setDeleteItem={setDeleteItem}
             setDeleteModal={setDeleteModal}
+            page={page}
+            setPage={setPage}
+            totalPages={TotalPages}
           />
         </div>
       </div>

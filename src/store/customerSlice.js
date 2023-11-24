@@ -11,6 +11,7 @@ export const customerSlice = createSlice({
       };
     },
     addCustomers: (state, action) => {
+      localStorage.setItem("CusArray", [action.payload, ...state.customers]);
       return {
         ...state,
         customers: [action.payload, ...state.customers],
@@ -28,6 +29,7 @@ export const customerSlice = createSlice({
         }
         return itm;
       });
+      localStorage.setItem("CusArray", newData);
       return {
         ...state,
         customers: newData,
@@ -35,6 +37,7 @@ export const customerSlice = createSlice({
     },
     DeleteCustomer: (state, action) => {
       const newArr = state.customers.filter((x) => x.id != action.payload.id);
+      localStorage.setItem("CusArray", newArr);
       return {
         ...state,
         customers: newArr,
