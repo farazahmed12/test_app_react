@@ -4,11 +4,21 @@ import Logo from "../assets/Logo.png";
 import CustomerLogo from "../assets/customersicon.svg";
 import CustomersTable from "./CustomersTable";
 import AddNewModal from "./AddNewModal";
+import DeleteModal from "./DeleteModal";
+import { toast } from "react-toastify";
+
 import { getCustomers } from "../store/customerSlice";
 import { useDispatch } from "react-redux";
 
 const Customers = () => {
   const dispatch = useDispatch();
+
+  const [addNewVisible, setAddNewVisible] = useState(false);
+  const [selectedItem, setSelecteditem] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteItem, setDeleteItem] = useState([]);
+
   const getData = () => {
     axios
       .get(`https://reqres.in/api/users?page=1`)
@@ -17,16 +27,22 @@ const Customers = () => {
 
         dispatch(getCustomers(res?.data?.data));
       })
-      .catch((err) => {});
+      .catch((err) => {
+        toast.error("Something Went Wrong", {
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+
+          theme: "light",
+        });
+      });
   };
-  const [addNewVisible, setAddNewVisible] = useState(false);
-  const [selectedItem, setSelecteditem] = useState([]);
-  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     getData();
   }, []);
-
   return (
     <div className="min-h-screen flex relative">
       {/* sidebar */}
@@ -71,6 +87,8 @@ const Customers = () => {
             setModalVisible={() => {
               setAddNewVisible(true);
             }}
+            setDeleteItem={setDeleteItem}
+            setDeleteModal={setDeleteModal}
           />
         </div>
       </div>
@@ -84,6 +102,13 @@ const Customers = () => {
         }}
         edit={edit}
         selectedItem={selectedItem}
+      />
+
+      <DeleteModal
+        setModalVisible={setDeleteModal}
+        modalVisible={deleteModal}
+        setDeleteItem={setDeleteItem}
+        deleteItem={deleteItem}
       />
     </div>
   );

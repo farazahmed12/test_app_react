@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import CustomerPic from "../assets/customerPic.png";
 import { useSelector } from "react-redux";
 
-const CustomersTable = ({ setEdit, setSelecteditem, setModalVisible }) => {
+const CustomersTable = ({
+  setEdit,
+  setSelecteditem,
+  setModalVisible,
+  setDeleteItem,
+  setDeleteModal,
+}) => {
   const customers = useSelector((state) => state.customer.customers);
   console.log("customers", customers);
 
@@ -57,7 +63,13 @@ const CustomersTable = ({ setEdit, setSelecteditem, setModalVisible }) => {
                     >
                       edit
                     </button>
-                    <button className="text-center bg-[#d99898]  px-3 rounded-md py-1 text-[#D80000] capitalize">
+                    <button
+                      onClick={() => {
+                        setDeleteItem(item);
+                        setDeleteModal(true);
+                      }}
+                      className="text-center bg-[#d99898]  px-3 rounded-md py-1 text-[#D80000] capitalize"
+                    >
                       Delete
                     </button>
                   </td>

@@ -17,8 +17,6 @@ export const customerSlice = createSlice({
       };
     },
     updateCustomer: (state, action) => {
-      console.log(action);
-
       const newData = state.customers?.map((itm) => {
         if (itm?.id == action.payload.id) {
           return {
@@ -35,7 +33,13 @@ export const customerSlice = createSlice({
         customers: newData,
       };
     },
-    DeleteCustomer: (state) => {},
+    DeleteCustomer: (state, action) => {
+      const newArr = state.customers.filter((x) => x.id != action.payload.id);
+      return {
+        ...state,
+        customers: newArr,
+      };
+    },
   },
 });
 

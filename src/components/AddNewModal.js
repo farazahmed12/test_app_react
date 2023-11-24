@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { addCustomers, updateCustomer } from "../store/customerSlice";
 import { useDispatch } from "react-redux";
 
@@ -106,9 +106,27 @@ function AddNewModal({
               if (edit == true) {
                 dispatch(updateCustomer(data));
                 setModalVisible(!modalVisible);
+                toast.success("Customer Updated SuccessFully", {
+                  autoClose: 2500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+
+                  theme: "light",
+                });
               } else {
                 dispatch(addCustomers(data));
                 setModalVisible(!modalVisible);
+                toast.success("Customer Added SuccessFully", {
+                  autoClose: 2500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+
+                  theme: "light",
+                });
               }
             }}
             className="flex text-white py-2 rounded-md cursor-pointer bg-gradient-to-r from-[#57BC90] to-[#004B40]  flex-row justify-center w-8/12 mt-6 mb-10"
